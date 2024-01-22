@@ -7,5 +7,6 @@ import (
 
 func main() {
 	database.ConnectDB()
-	routes.HandleRequest()
+	r := routes.HandleRequest()
+	r.Run(":3000")
 }

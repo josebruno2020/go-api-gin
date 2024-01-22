@@ -24,12 +24,12 @@ func StudentsRoutes(r *gin.Engine) {
 	s.DELETE("/:id", controllers.Delete)
 }
 
-func HandleRequest() {
+func HandleRequest() *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/", HealthCheck)
 
 	StudentsRoutes(r)
 
-	r.Run(":3000")
+	return r
 }
