@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -94,6 +96,65 @@ func TestFindByCPF(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, res.Code)
 	assert.Equal(t, cpf, studentResponse.CPF)
+}
+
+func TestFindById(t *testing.T) {
+	SetupDatabase()
+	defer DeleteMockStudent()
+
+	r := routes.HandleRequest()
+	pathSearch := fmt.Sprintf("/students/%d", ID)
+	req, _ := http.NewRequest("GET", pathSearch, nil)
+
+	res := MakeRequest(r, req)
+
+	var studentResponse models.Student
+	json.NewDecoder(res.Body).Decode(&studentResponse)
+
+	assert.Equal(t, ID, int(studentResponse.ID))
+	assert.Equal(t, "Aluno teste", studentResponse.Name)
+	assert.Equal(t, http.StatusOK, res.Code)
+}
+
+func TestDeleteById(t *testing.T) {
+	SetupDatabase()
+
+	r := routes.HandleRequest()
+	pathDelete := fmt.Sprintf("/students/%d", ID)
+	req, _ := http.NewRequest("DELETE", pathDelete, nil)
+
+	res := MakeRequest(r, req)
+
+	assert.Equal(t, http.StatusNoContent, res.Code)
+}
+
+func TestUpdateById(t *testing.T) {
+	SetupDatabase()
+	defer DeleteMockStudent()
+
+	r := routes.HandleRequest()
+	pathUpdate := fmt.Sprintf("/students/%d", ID)
+	studentToEdit := models.Student{
+		Name: "Aluno teste Atualizado",
+		CPF:  "09123456780",
+		RG:   "987654321",
+	}
+	jsonValue, _ := json.Marshal(studentToEdit)
+	fmt.Println(string(jsonValue))
+	req, _ := http.NewRequest("PATCH", pathUpdate, bytes.NewBuffer(jsonValue))
+
+	res := MakeRequest(r, req)
+
+	var responseStudent models.Student
+
+	if err := json.Unmarshal(res.Body.Bytes(), &responseStudent); err != nil {
+		t.Fatal(err.Error())
+	}
+
+	assert.Equal(t, http.StatusOK, res.Code)
+	assert.Equal(t, studentToEdit.Name, responseStudent.Name)
+	assert.Equal(t, studentToEdit.CPF, responseStudent.CPF)
+	assert.Equal(t, studentToEdit.RG, responseStudent.RG)
 }
 
 func MakeRequest(r *gin.Engine, req *http.Request) *httptest.ResponseRecorder {
