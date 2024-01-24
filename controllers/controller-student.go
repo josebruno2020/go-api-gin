@@ -123,11 +123,17 @@ func (c *StudentController) Create(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.StudentView
 // @Failure 400 {object} HttpError
+// @Failure 404 {object} HttpError
 // @Router /api/v1/students/{id} [patch]
 func (c *StudentController) Update(ctx *gin.Context) {
 	var student models.Student
 	id := ctx.Params.ByName("id")
 	database.DB.First(&student, id)
+
+	if student.ID == 0 {
+		sendJsonError(ctx, HttpError{http.StatusNotFound, "Student not found"})
+		return
+	}
 
 	if err := ctx.ShouldBindJSON(&student); err != nil {
 		sendJsonError(ctx, HttpError{http.StatusBadRequest, err.Error()})

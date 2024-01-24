@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -135,12 +134,12 @@ func TestUpdateById(t *testing.T) {
 
 	r := routes.HandleRequest()
 	pathUpdate := fmt.Sprintf("/api/v1/students/%d", ID)
-	studentToEdit := models.Student{
-		Name: "Aluno teste Atualizado",
-		CPF:  "09123456780",
-		RG:   "987654321",
+	requestBody := gin.H{
+		"name": "Aluno teste Atualizado",
+		"cpf":  "09123456780",
+		"rg":   "987654321",
 	}
-	jsonValue, _ := json.Marshal(studentToEdit)
+	jsonValue, _ := json.Marshal(requestBody)
 
 	req, _ := http.NewRequest("PATCH", pathUpdate, bytes.NewBuffer(jsonValue))
 
@@ -151,13 +150,12 @@ func TestUpdateById(t *testing.T) {
 	if err := json.Unmarshal(res.Body.Bytes(), &responseStudent); err != nil {
 		t.Fatal(err.Error())
 	}
-	b, _ := io.ReadAll(res.Body)
-	log.Println(string(b))
 
 	assert.Equal(t, http.StatusOK, res.Code)
-	assert.Equal(t, studentToEdit.Name, responseStudent.Name)
-	assert.Equal(t, studentToEdit.CPF, responseStudent.CPF)
-	assert.Equal(t, studentToEdit.RG, responseStudent.RG)
+	assert.Equal(t, ID, responseStudent.Id)
+	assert.Equal(t, requestBody["name"], responseStudent.Name)
+	assert.Equal(t, requestBody["cpf"], responseStudent.CPF)
+	assert.Equal(t, requestBody["rg"], responseStudent.RG)
 }
 
 func MakeRequest(r *gin.Engine, req *http.Request) *httptest.ResponseRecorder {
