@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/josebruno2020/go-api-gin/controllers"
 	"github.com/josebruno2020/go-api-gin/docs"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -16,21 +15,8 @@ func healthCheck(ctx *gin.Context) {
 	})
 }
 
-func HandlerNotFound(ctx *gin.Context) {
+func handlerNotFound(ctx *gin.Context) {
 	ctx.HTML(http.StatusNotFound, "404.html", nil)
-}
-
-func studentsRoutes(r *gin.Engine) {
-	s := r.Group("/students")
-
-	s.GET("", controllers.FindAll)
-	s.GET("/cpf/:cpf", controllers.FindByCPF)
-	s.POST("", controllers.Create)
-	s.GET("/:id", controllers.Find)
-	s.PATCH("/:id", controllers.Update)
-	s.DELETE("/:id", controllers.Delete)
-
-	s.GET("/index", controllers.IndexPage)
 }
 
 func setupSwagger(r *gin.Engine) {
@@ -42,7 +28,7 @@ func HandleRequest() *gin.Engine {
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*.html")
 	r.Static("/assets", "./assets")
-	r.NoRoute(HandlerNotFound)
+	r.NoRoute(handlerNotFound)
 
 	r.GET("/", healthCheck)
 

@@ -6,10 +6,10 @@ import (
 )
 
 type Student struct {
-	gorm.Model
-	Name string `json:"name" validate:"nonzero"`
-	CPF  string `json:"cpf" validate:"len=11,regexp=^[0-9]*$"`
-	RG   string `json:"rg" validate:"len=9,regexp=^[0-9]*$"`
+	gorm.Model `swaggerignore:"true"`
+	Name       string `example:"Aluno Teste" binding:"required" validate:"nonzero"`
+	CPF        string `example:"01234567890"  binding:"required"  validate:"len=11,regexp=^[0-9]*$"`
+	RG         string `example:"123456789"   binding:"required"   validate:"len=9,regexp=^[0-9]*$"`
 }
 
 func (c *Student) ValidateData() error {
@@ -17,4 +17,14 @@ func (c *Student) ValidateData() error {
 		return err
 	}
 	return nil
+}
+
+func (c *Student) ToStudentView() StudentView {
+	return StudentView{
+		Id:        int(c.ID),
+		Name:      c.Name,
+		CPF:       c.CPF,
+		RG:        c.RG,
+		CreatedAt: c.CreatedAt,
+	}
 }

@@ -11,7 +11,7 @@ import (
 type StudentController struct {
 }
 
-// @BasePath /students
+// @BasePath /api/v1/students
 
 // FindAll godoc
 // @Summary Listar alunos
@@ -20,12 +20,19 @@ type StudentController struct {
 // @Tags students
 // @Accept json
 // @Produce json
-// @Success 200 {object} []models.Student
-// @Router /students [get]
-func FindAll(ctx *gin.Context) {
+// @Success 200 {object} []models.StudentView
+// @Router /api/v1/students [get]
+func (c *StudentController) FindAll(ctx *gin.Context) {
 	var students []models.Student
 	database.DB.Find(&students)
-	ctx.JSON(http.StatusOK, students)
+
+	studentsView := []models.StudentView{}
+
+	for _, s := range students {
+		studentsView = append(studentsView, s.ToStudentView())
+	}
+
+	ctx.JSON(http.StatusOK, studentsView)
 }
 
 // FindByCPF godoc
@@ -36,10 +43,10 @@ func FindAll(ctx *gin.Context) {
 // @Param cpf path string true "CPF para buscar aluno"
 // @Accept json
 // @Produce json
-// @Success 200 {object} models.Student
+// @Success 200 {object} models.StudentView
 // @Failure 404 {object} HttpError
-// @Router /students/cpf/{cpf} [get]
-func FindByCPF(ctx *gin.Context) {
+// @Router /api/v1/students/cpf/{cpf} [get]
+func (c *StudentController) FindByCPF(ctx *gin.Context) {
 	cpf := ctx.Param("cpf")
 	var student models.Student
 	database.DB.Where("cpf = ?", cpf).First(&student)
@@ -49,7 +56,7 @@ func FindByCPF(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, student)
+	ctx.JSON(http.StatusOK, student.ToStudentView())
 }
 
 // Find godoc
@@ -60,10 +67,10 @@ func FindByCPF(ctx *gin.Context) {
 // @Param id path string true "ID para buscar aluno"
 // @Accept json
 // @Produce json
-// @Success 200 {object} models.Student
+// @Success 200 {object} models.StudentView
 // @Failure 404 {object} HttpError
-// @Router /students/{id} [get]
-func Find(ctx *gin.Context) {
+// @Router /api/v1/students/{id} [get]
+func (c *StudentController) Find(ctx *gin.Context) {
 	var student models.Student
 	id := ctx.Params.ByName("id")
 	database.DB.First(&student, id)
@@ -73,7 +80,7 @@ func Find(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, student)
+	ctx.JSON(http.StatusOK, student.ToStudentView())
 }
 
 // Create godoc
@@ -84,10 +91,10 @@ func Find(ctx *gin.Context) {
 // @Param aluno body models.Student true "estrutura de aluno"
 // @Accept json
 // @Produce json
-// @Success 201 {object} models.Student
+// @Success 201 {object} models.StudentView
 // @Failure 400 {object} HttpError
-// @Router /students [post]
-func Create(ctx *gin.Context) {
+// @Router /api/v1/students [post]
+func (c *StudentController) Create(ctx *gin.Context) {
 	var student models.Student
 
 	if err := ctx.ShouldBindJSON(&student); err != nil {
@@ -102,7 +109,7 @@ func Create(ctx *gin.Context) {
 
 	database.DB.Create(&student)
 
-	ctx.JSON(http.StatusCreated, student)
+	ctx.JSON(http.StatusCreated, student.ToStudentView())
 }
 
 // Update godoc
@@ -114,10 +121,10 @@ func Create(ctx *gin.Context) {
 // @Param id    path string true "ID do aluno"
 // @Accept json
 // @Produce json
-// @Success 200 {object} models.Student
+// @Success 200 {object} models.StudentView
 // @Failure 400 {object} HttpError
-// @Router /students/{id} [patch]
-func Update(ctx *gin.Context) {
+// @Router /api/v1/students/{id} [patch]
+func (c *StudentController) Update(ctx *gin.Context) {
 	var student models.Student
 	id := ctx.Params.ByName("id")
 	database.DB.First(&student, id)
@@ -132,9 +139,9 @@ func Update(ctx *gin.Context) {
 		return
 	}
 
-	database.DB.Model(&student).UpdateColumns(student)
+	database.DB.Save(&student)
 
-	ctx.JSON(http.StatusOK, student)
+	ctx.JSON(http.StatusOK, student.ToStudentView())
 }
 
 // Delete godoc
@@ -146,8 +153,8 @@ func Update(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 204
-// @Router /students/{id} [delete]
-func Delete(ctx *gin.Context) {
+// @Router /api/v1/students/{id} [delete]
+func (c *StudentController) Delete(ctx *gin.Context) {
 	var student models.Student
 	id := ctx.Params.ByName("id")
 	database.DB.Delete(&student, id)
@@ -155,7 +162,7 @@ func Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusNoContent, nil)
 }
 
-func IndexPage(ctx *gin.Context) {
+func (c *StudentController) IndexPage(ctx *gin.Context) {
 	var students []models.Student
 	database.DB.Find(&students)
 	ctx.HTML(200, "index.html", gin.H{

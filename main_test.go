@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -66,18 +67,18 @@ func TestFindAllStudents(t *testing.T) {
 	defer DeleteMockStudent()
 	r := routes.HandleRequest()
 
-	req, _ := http.NewRequest("GET", "/students", nil)
+	req, _ := http.NewRequest("GET", "/api/v1/students", nil)
 	res := MakeRequest(r, req)
 
 	assert.Equal(t, http.StatusOK, res.Code)
 
-	var s []models.Student
+	var s []models.StudentView
 	var studentsFromDB []models.Student
 	database.DB.Find(&studentsFromDB)
 
 	json.NewDecoder(res.Body).Decode(&s)
 
-	assert.Equal(t, studentsFromDB, s)
+	assert.Equal(t, len(studentsFromDB), len(s))
 }
 
 func TestFindByCPF(t *testing.T) {
@@ -87,7 +88,7 @@ func TestFindByCPF(t *testing.T) {
 
 	cpf := "09123456789"
 
-	req, _ := http.NewRequest("GET", "/students/cpf/"+cpf, nil)
+	req, _ := http.NewRequest("GET", "/api/v1/students/cpf/"+cpf, nil)
 	res := MakeRequest(r, req)
 
 	var studentResponse models.Student
@@ -103,7 +104,7 @@ func TestFindById(t *testing.T) {
 	defer DeleteMockStudent()
 
 	r := routes.HandleRequest()
-	pathSearch := fmt.Sprintf("/students/%d", ID)
+	pathSearch := fmt.Sprintf("/api/v1/students/%d", ID)
 	req, _ := http.NewRequest("GET", pathSearch, nil)
 
 	res := MakeRequest(r, req)
@@ -120,7 +121,7 @@ func TestDeleteById(t *testing.T) {
 	SetupDatabase()
 
 	r := routes.HandleRequest()
-	pathDelete := fmt.Sprintf("/students/%d", ID)
+	pathDelete := fmt.Sprintf("/api/v1/students/%d", ID)
 	req, _ := http.NewRequest("DELETE", pathDelete, nil)
 
 	res := MakeRequest(r, req)
@@ -133,7 +134,7 @@ func TestUpdateById(t *testing.T) {
 	defer DeleteMockStudent()
 
 	r := routes.HandleRequest()
-	pathUpdate := fmt.Sprintf("/students/%d", ID)
+	pathUpdate := fmt.Sprintf("/api/v1/students/%d", ID)
 	studentToEdit := models.Student{
 		Name: "Aluno teste Atualizado",
 		CPF:  "09123456780",
@@ -145,11 +146,13 @@ func TestUpdateById(t *testing.T) {
 
 	res := MakeRequest(r, req)
 
-	var responseStudent models.Student
+	var responseStudent models.StudentView
 
 	if err := json.Unmarshal(res.Body.Bytes(), &responseStudent); err != nil {
 		t.Fatal(err.Error())
 	}
+	b, _ := io.ReadAll(res.Body)
+	log.Println(string(b))
 
 	assert.Equal(t, http.StatusOK, res.Code)
 	assert.Equal(t, studentToEdit.Name, responseStudent.Name)

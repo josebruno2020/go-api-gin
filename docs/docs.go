@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/students": {
+        "/api/v1/students": {
             "get": {
                 "description": "Rota para listar todos os alunos",
                 "consumes": [
@@ -34,7 +34,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Student"
+                                "$ref": "#/definitions/models.StudentView"
                             }
                         }
                     }
@@ -67,7 +67,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.Student"
+                            "$ref": "#/definitions/models.StudentView"
                         }
                     },
                     "400": {
@@ -79,7 +79,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/students/cpf/{cpf}": {
+        "/api/v1/students/cpf/{cpf}": {
             "get": {
                 "description": "Rota para buscar aluno por CPF",
                 "consumes": [
@@ -105,7 +105,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Student"
+                            "$ref": "#/definitions/models.StudentView"
                         }
                     },
                     "404": {
@@ -117,7 +117,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/students/{id}": {
+        "/api/v1/students/{id}": {
             "get": {
                 "description": "Rota para buscar aluno por ID",
                 "consumes": [
@@ -143,7 +143,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Student"
+                            "$ref": "#/definitions/models.StudentView"
                         }
                     },
                     "404": {
@@ -215,7 +215,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Student"
+                            "$ref": "#/definitions/models.StudentView"
                         }
                     },
                     "400": {
@@ -240,29 +240,36 @@ const docTemplate = `{
                 }
             }
         },
-        "gorm.DeletedAt": {
+        "models.Student": {
             "type": "object",
+            "required": [
+                "cpf",
+                "name",
+                "rg"
+            ],
             "properties": {
-                "time": {
-                    "type": "string"
+                "cpf": {
+                    "type": "string",
+                    "example": "01234567890"
                 },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
+                "name": {
+                    "type": "string",
+                    "example": "Aluno Teste"
+                },
+                "rg": {
+                    "type": "string",
+                    "example": "123456789"
                 }
             }
         },
-        "models.Student": {
+        "models.StudentView": {
             "type": "object",
             "properties": {
                 "cpf": {
                     "type": "string"
                 },
-                "createdAt": {
+                "created_at": {
                     "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
                 },
                 "id": {
                     "type": "integer"
@@ -271,9 +278,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "rg": {
-                    "type": "string"
-                },
-                "updatedAt": {
                     "type": "string"
                 }
             }

@@ -6,35 +6,39 @@ definitions:
       message:
         type: string
     type: object
-  gorm.DeletedAt:
-    properties:
-      time:
-        type: string
-      valid:
-        description: Valid is true if Time is not NULL
-        type: boolean
-    type: object
   models.Student:
     properties:
       cpf:
+        example: "01234567890"
         type: string
-      createdAt:
+      name:
+        example: Aluno Teste
         type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
+      rg:
+        example: "123456789"
+        type: string
+    required:
+    - cpf
+    - name
+    - rg
+    type: object
+  models.StudentView:
+    properties:
+      cpf:
+        type: string
+      created_at:
+        type: string
       id:
         type: integer
       name:
         type: string
       rg:
         type: string
-      updatedAt:
-        type: string
     type: object
 info:
   contact: {}
 paths:
-  /students:
+  /api/v1/students:
     get:
       consumes:
       - application/json
@@ -46,7 +50,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Student'
+              $ref: '#/definitions/models.StudentView'
             type: array
       summary: Listar alunos
       tags:
@@ -68,7 +72,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.Student'
+            $ref: '#/definitions/models.StudentView'
         "400":
           description: Bad Request
           schema:
@@ -76,7 +80,7 @@ paths:
       summary: Cadastrar aluno
       tags:
       - students
-  /students/{id}:
+  /api/v1/students/{id}:
     delete:
       consumes:
       - application/json
@@ -111,7 +115,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Student'
+            $ref: '#/definitions/models.StudentView'
         "404":
           description: Not Found
           schema:
@@ -141,7 +145,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Student'
+            $ref: '#/definitions/models.StudentView'
         "400":
           description: Bad Request
           schema:
@@ -149,7 +153,7 @@ paths:
       summary: Atualizar aluno
       tags:
       - students
-  /students/cpf/{cpf}:
+  /api/v1/students/cpf/{cpf}:
     get:
       consumes:
       - application/json
@@ -166,7 +170,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Student'
+            $ref: '#/definitions/models.StudentView'
         "404":
           description: Not Found
           schema:
