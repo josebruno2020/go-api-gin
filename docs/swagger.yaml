@@ -2,8 +2,10 @@ definitions:
   controllers.HttpError:
     properties:
       code:
+        example: 404
         type: integer
       message:
+        example: Student not found
         type: string
     type: object
   models.Student:
@@ -54,7 +56,7 @@ paths:
             type: array
       summary: Listar alunos
       tags:
-      - students
+      - Alunos
     post:
       consumes:
       - application/json
@@ -79,7 +81,7 @@ paths:
             $ref: '#/definitions/controllers.HttpError'
       summary: Cadastrar aluno
       tags:
-      - students
+      - Alunos
   /api/v1/students/{id}:
     delete:
       consumes:
@@ -98,7 +100,7 @@ paths:
           description: No Content
       summary: Deletar aluno
       tags:
-      - students
+      - Alunos
     get:
       consumes:
       - application/json
@@ -122,7 +124,7 @@ paths:
             $ref: '#/definitions/controllers.HttpError'
       summary: Buscar aluno por ID
       tags:
-      - students
+      - Alunos
     patch:
       consumes:
       - application/json
@@ -150,9 +152,13 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controllers.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.HttpError'
       summary: Atualizar aluno
       tags:
-      - students
+      - Alunos
   /api/v1/students/cpf/{cpf}:
     get:
       consumes:
@@ -177,5 +183,5 @@ paths:
             $ref: '#/definitions/controllers.HttpError'
       summary: Buscar aluno por cpf
       tags:
-      - students
+      - Alunos
 swagger: "2.0"

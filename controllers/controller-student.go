@@ -17,7 +17,7 @@ type StudentController struct {
 // @Summary Listar alunos
 // @Schemes
 // @Description Rota para listar todos os alunos
-// @Tags students
+// @Tags Alunos
 // @Accept json
 // @Produce json
 // @Success 200 {object} []models.StudentView
@@ -39,7 +39,7 @@ func (c *StudentController) FindAll(ctx *gin.Context) {
 // @Summary Buscar aluno por cpf
 // @Schemes
 // @Description Rota para buscar aluno por CPF
-// @Tags students
+// @Tags Alunos
 // @Param cpf path string true "CPF para buscar aluno"
 // @Accept json
 // @Produce json
@@ -63,7 +63,7 @@ func (c *StudentController) FindByCPF(ctx *gin.Context) {
 // @Summary Buscar aluno por ID
 // @Schemes
 // @Description Rota para buscar aluno por ID
-// @Tags students
+// @Tags Alunos
 // @Param id path string true "ID para buscar aluno"
 // @Accept json
 // @Produce json
@@ -87,7 +87,7 @@ func (c *StudentController) Find(ctx *gin.Context) {
 // @Summary Cadastrar aluno
 // @Schemes
 // @Description Rota para cadastrar aluno
-// @Tags students
+// @Tags Alunos
 // @Param aluno body models.Student true "estrutura de aluno"
 // @Accept json
 // @Produce json
@@ -116,7 +116,7 @@ func (c *StudentController) Create(ctx *gin.Context) {
 // @Summary Atualizar aluno
 // @Schemes
 // @Description Rota para atualizar aluno
-// @Tags students
+// @Tags Alunos
 // @Param aluno body models.Student true "estrutura de aluno"
 // @Param id    path string true "ID do aluno"
 // @Accept json
@@ -154,7 +154,7 @@ func (c *StudentController) Update(ctx *gin.Context) {
 // @Summary Deletar aluno
 // @Schemes
 // @Description Rota para deletar aluno
-// @Tags students
+// @Tags Alunos
 // @Param id path string true "ID do aluno"
 // @Accept json
 // @Produce json

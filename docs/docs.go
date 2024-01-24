@@ -25,7 +25,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Listar alunos",
                 "responses": {
@@ -49,7 +49,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Cadastrar aluno",
                 "parameters": [
@@ -89,7 +89,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Buscar aluno por cpf",
                 "parameters": [
@@ -127,7 +127,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Buscar aluno por ID",
                 "parameters": [
@@ -163,7 +163,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Deletar aluno",
                 "parameters": [
@@ -190,7 +190,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Atualizar aluno",
                 "parameters": [
@@ -223,6 +223,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/controllers.HttpError"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.HttpError"
+                        }
                     }
                 }
             }
@@ -233,10 +239,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 404
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Student not found"
                 }
             }
         },

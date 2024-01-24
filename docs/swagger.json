@@ -14,7 +14,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Listar alunos",
                 "responses": {
@@ -38,7 +38,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Cadastrar aluno",
                 "parameters": [
@@ -78,7 +78,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Buscar aluno por cpf",
                 "parameters": [
@@ -116,7 +116,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Buscar aluno por ID",
                 "parameters": [
@@ -152,7 +152,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Deletar aluno",
                 "parameters": [
@@ -179,7 +179,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "students"
+                    "Alunos"
                 ],
                 "summary": "Atualizar aluno",
                 "parameters": [
@@ -212,6 +212,12 @@
                         "schema": {
                             "$ref": "#/definitions/controllers.HttpError"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.HttpError"
+                        }
                     }
                 }
             }
@@ -222,10 +228,12 @@
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 404
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Student not found"
                 }
             }
         },
