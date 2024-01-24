@@ -1,0 +1,177 @@
+definitions:
+  controllers.HttpError:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Student:
+    properties:
+      cpf:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      rg:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /students:
+    get:
+      consumes:
+      - application/json
+      description: Rota para listar todos os alunos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Student'
+            type: array
+      summary: Listar alunos
+      tags:
+      - students
+    post:
+      consumes:
+      - application/json
+      description: Rota para cadastrar aluno
+      parameters:
+      - description: estrutura de aluno
+        in: body
+        name: aluno
+        required: true
+        schema:
+          $ref: '#/definitions/models.Student'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.HttpError'
+      summary: Cadastrar aluno
+      tags:
+      - students
+  /students/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Rota para deletar aluno
+      parameters:
+      - description: ID do aluno
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deletar aluno
+      tags:
+      - students
+    get:
+      consumes:
+      - application/json
+      description: Rota para buscar aluno por ID
+      parameters:
+      - description: ID para buscar aluno
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Student'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.HttpError'
+      summary: Buscar aluno por ID
+      tags:
+      - students
+    patch:
+      consumes:
+      - application/json
+      description: Rota para atualizar aluno
+      parameters:
+      - description: estrutura de aluno
+        in: body
+        name: aluno
+        required: true
+        schema:
+          $ref: '#/definitions/models.Student'
+      - description: ID do aluno
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.HttpError'
+      summary: Atualizar aluno
+      tags:
+      - students
+  /students/cpf/{cpf}:
+    get:
+      consumes:
+      - application/json
+      description: Rota para buscar aluno por CPF
+      parameters:
+      - description: CPF para buscar aluno
+        in: path
+        name: cpf
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Student'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.HttpError'
+      summary: Buscar aluno por cpf
+      tags:
+      - students
+swagger: "2.0"

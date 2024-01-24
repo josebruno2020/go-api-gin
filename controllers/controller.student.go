@@ -8,21 +8,37 @@ import (
 	"github.com/josebruno2020/go-api-gin/models"
 )
 
-type HttpError struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+type StudentController struct {
 }
 
-func sendJsonError(ctx *gin.Context, err HttpError) {
-	ctx.JSON(err.Code, err)
-}
+// @BasePath /students
 
+// FindAll godoc
+// @Summary Listar alunos
+// @Schemes
+// @Description Rota para listar todos os alunos
+// @Tags students
+// @Accept json
+// @Produce json
+// @Success 200 {object} []models.Student
+// @Router /students [get]
 func FindAll(ctx *gin.Context) {
 	var students []models.Student
 	database.DB.Find(&students)
 	ctx.JSON(http.StatusOK, students)
 }
 
+// FindByCPF godoc
+// @Summary Buscar aluno por cpf
+// @Schemes
+// @Description Rota para buscar aluno por CPF
+// @Tags students
+// @Param cpf path string true "CPF para buscar aluno"
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.Student
+// @Failure 404 {object} HttpError
+// @Router /students/cpf/{cpf} [get]
 func FindByCPF(ctx *gin.Context) {
 	cpf := ctx.Param("cpf")
 	var student models.Student
@@ -36,6 +52,17 @@ func FindByCPF(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, student)
 }
 
+// Find godoc
+// @Summary Buscar aluno por ID
+// @Schemes
+// @Description Rota para buscar aluno por ID
+// @Tags students
+// @Param id path string true "ID para buscar aluno"
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.Student
+// @Failure 404 {object} HttpError
+// @Router /students/{id} [get]
 func Find(ctx *gin.Context) {
 	var student models.Student
 	id := ctx.Params.ByName("id")
@@ -49,6 +76,17 @@ func Find(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, student)
 }
 
+// Create godoc
+// @Summary Cadastrar aluno
+// @Schemes
+// @Description Rota para cadastrar aluno
+// @Tags students
+// @Param aluno body models.Student true "estrutura de aluno"
+// @Accept json
+// @Produce json
+// @Success 201 {object} models.Student
+// @Failure 400 {object} HttpError
+// @Router /students [post]
 func Create(ctx *gin.Context) {
 	var student models.Student
 
@@ -67,6 +105,18 @@ func Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, student)
 }
 
+// Update godoc
+// @Summary Atualizar aluno
+// @Schemes
+// @Description Rota para atualizar aluno
+// @Tags students
+// @Param aluno body models.Student true "estrutura de aluno"
+// @Param id    path string true "ID do aluno"
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.Student
+// @Failure 400 {object} HttpError
+// @Router /students/{id} [patch]
 func Update(ctx *gin.Context) {
 	var student models.Student
 	id := ctx.Params.ByName("id")
@@ -87,6 +137,16 @@ func Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, student)
 }
 
+// Delete godoc
+// @Summary Deletar aluno
+// @Schemes
+// @Description Rota para deletar aluno
+// @Tags students
+// @Param id path string true "ID do aluno"
+// @Accept json
+// @Produce json
+// @Success 204
+// @Router /students/{id} [delete]
 func Delete(ctx *gin.Context) {
 	var student models.Student
 	id := ctx.Params.ByName("id")

@@ -5,6 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/josebruno2020/go-api-gin/controllers"
+	"github.com/josebruno2020/go-api-gin/docs"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func healthCheck(ctx *gin.Context) {
@@ -30,6 +33,11 @@ func studentsRoutes(r *gin.Engine) {
 	s.GET("/index", controllers.IndexPage)
 }
 
+func setupSwagger(r *gin.Engine) {
+	docs.SwaggerInfo.BasePath = "/"
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+}
+
 func HandleRequest() *gin.Engine {
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*.html")
@@ -39,6 +47,7 @@ func HandleRequest() *gin.Engine {
 	r.GET("/", healthCheck)
 
 	studentsRoutes(r)
+	setupSwagger(r)
 
 	return r
 }
