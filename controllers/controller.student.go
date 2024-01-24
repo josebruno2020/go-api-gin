@@ -94,3 +94,11 @@ func Delete(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusNoContent, nil)
 }
+
+func IndexPage(ctx *gin.Context) {
+	var students []models.Student
+	database.DB.Find(&students)
+	ctx.HTML(200, "index.html", gin.H{
+		"students": students,
+	})
+}

@@ -140,7 +140,7 @@ func TestUpdateById(t *testing.T) {
 		RG:   "987654321",
 	}
 	jsonValue, _ := json.Marshal(studentToEdit)
-	fmt.Println(string(jsonValue))
+
 	req, _ := http.NewRequest("PATCH", pathUpdate, bytes.NewBuffer(jsonValue))
 
 	res := MakeRequest(r, req)

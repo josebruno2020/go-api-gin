@@ -7,13 +7,17 @@ import (
 	"github.com/josebruno2020/go-api-gin/controllers"
 )
 
-func HealthCheck(ctx *gin.Context) {
+func healthCheck(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"ping": "pong",
 	})
 }
 
-func StudentsRoutes(r *gin.Engine) {
+func HandlerNotFound(ctx *gin.Context) {
+	ctx.HTML(http.StatusNotFound, "404.html", nil)
+}
+
+func studentsRoutes(r *gin.Engine) {
 	s := r.Group("/students")
 
 	s.GET("", controllers.FindAll)
@@ -22,14 +26,19 @@ func StudentsRoutes(r *gin.Engine) {
 	s.GET("/:id", controllers.Find)
 	s.PATCH("/:id", controllers.Update)
 	s.DELETE("/:id", controllers.Delete)
+
+	s.GET("/index", controllers.IndexPage)
 }
 
 func HandleRequest() *gin.Engine {
 	r := gin.Default()
+	r.LoadHTMLGlob("templates/*.html")
+	r.Static("/assets", "./assets")
+	r.NoRoute(HandlerNotFound)
 
-	r.GET("/", HealthCheck)
+	r.GET("/", healthCheck)
 
-	StudentsRoutes(r)
+	studentsRoutes(r)
 
 	return r
 }
