@@ -15,15 +15,9 @@ A documentação foi feita com Swagger. Após rodar o projeto localmente, a doc 
 ### Pré-requisitos:
 
 - Go (1.21)
-- Postgres (necessário alterar informações no arquivo `db.go`)
+- Postgres (necessário criar o arquivo `.env`, seguindo o examplo do `.env.example`)
 
 ---
-
-Para instalar as dependências necessárias, rodar o comando na raíz do projeto:
-
-```sh
-go get .
-```
 
 Para iniciar o serviço:
 
