@@ -5,8 +5,8 @@ import (
 	"github.com/josebruno2020/go-api-gin/controllers"
 )
 
-func studentsRoutes(r *gin.Engine) {
-	s := r.Group("/api/v1/students")
+func studentsRoutes(r *gin.RouterGroup) {
+	s := r.Group("/students")
 
 	studentController := controllers.StudentController{}
 
