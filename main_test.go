@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/josebruno2020/go-api-gin/database"
 	"github.com/josebruno2020/go-api-gin/models"
 	"github.com/josebruno2020/go-api-gin/routes"
@@ -39,6 +40,7 @@ func SetupDatabase() {
 }
 
 func init() {
+	godotenv.Load()
 	gin.SetMode(gin.ReleaseMode)
 }
 

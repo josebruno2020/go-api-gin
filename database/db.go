@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/josebruno2020/go-api-gin/models"
 	"gorm.io/driver/postgres"
@@ -14,7 +15,13 @@ var (
 )
 
 func ConnectDB() {
-	dns := fmt.Sprintf("host=localhost user=postgres password=postgres dbname=go_rest port=5433 sslmode=disable TimeZone=America/Sao_Paulo")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+
+	dns := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=America/Sao_Paulo", host, port, user, password, dbName)
 	DB, err = gorm.Open(postgres.Open(dns))
 
 	if err != nil {

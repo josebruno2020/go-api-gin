@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/josebruno2020/go-api-gin/docs"
@@ -25,6 +26,9 @@ func setupSwagger(r *gin.Engine) {
 }
 
 func HandleRequest() *gin.Engine {
+	if os.Getenv("APP_ENV") == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*.html")
 	r.Static("/assets", "./assets")
